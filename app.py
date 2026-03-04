@@ -2,14 +2,24 @@ from pathlib import Path
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="", layout="wide")
-st.title("")
+st.set_page_config(page_title="Ecotrack Cities", layout="wide")
+st.title("Ecotrack Cities")
 
 @st.cache_data
 def load_data():
    data_path = Path(r"C:\Users\athul\Documents\trae_projects\carbonfootprint\indian_city_carbon_dataset (1).csv")
    return pd.read_csv(data_path, encoding="utf-8")
 
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #e8f5e9;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 data = None
 data_load_error = None
 try:
@@ -17,7 +27,7 @@ try:
 except Exception as e:
     data_load_error = str(e)
 
-search_city = st.text_input("Search City", placeholder="Enter city name")
+search_city = st.selectbox("Select City", data["City"].sort_values().unique())
 
 if data_load_error:
     st.error(f"Failed to load dataset: {data_load_error}")
